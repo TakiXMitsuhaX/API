@@ -1,0 +1,984 @@
+ {
+  "openapi": "3.0.0",
+  "info": {
+    "title": "𝕮𝖆𝖘𝖙𝖑𝖊𝖛𝖆𝖓𝖎𝖆 API",
+    "description": "A Project Made To Centralize Various APIs 📖<br> :)",
+    "version": "v1.2"
+  },
+  "components": {
+    "schemas": {
+         "ScrapeRequest": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL of the web page to scrape"
+          },
+          "form": {
+            "type": "object",
+            "description": "Form data to post to the web page"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      }, 
+            "OCRRequest": {
+        "type": "object",
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "The URL of the image to extract text from."
+          },
+          "language": {
+            "type": "string",
+            "description": "The language to use for OCR.", 
+            "default": "eng"
+          }
+        },
+        "required": [
+          "imageUrl", 
+          "language"
+        ]
+      },
+      "OCRResponse": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "The extracted text from the image."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "The error message."
+          }
+        }
+      }, 
+
+    
+    "anime_full": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "genres": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rating": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    }, 
+
+"422": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "animequote": "string", 
+          "description": "A description of the error."
+        }
+      }
+    },
+    "200": {
+      "type": "object",
+      "properties": {
+        
+        "data": {
+          "type": "string",
+          "animequote": "string", 
+          "description": "this code indicates the sucess"
+        }
+      }
+    }
+  }
+}, 
+
+  "paths": {
+       "/scraper": {
+      "get": {
+        "tags": ["WebScraper"
+       ], 
+        "summary": "Scrape web content",
+        "description": "Scrapes the content of a web page specified by the `url` query parameter.",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "description": "URL of the web page to scrape",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+        }, 
+
+          
+        
+      
+    
+    "/scraper/post": {
+       "post": {
+         "tags": [
+           "WebScraper"
+         ], 
+        "summary": "Scrape web content",
+        "description": "Scrapes the content of a web page specified by the `url` property of the request body and posts the `form` data to the web page.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScrapeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+     }, 
+           "lyrics/title:/artist:": {
+      "get": {
+        "tags": [
+          "lyrics "
+        ],
+        "parameters": [
+          {
+            "name": "lyrics",
+            "in": "query",
+            "description": "Search for lyrics ",
+            "required": true, 
+            "style": "form", 
+            "explode": true,
+            "schema": {
+              "type": "string"  
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+        "/ocr/extract-text": {
+      "post": { 
+        "tags": [ 
+          "Ocr"
+        ], 
+        "summary": "Extract text from an image using OCR",
+        "description": "Extract text from an image .",
+        "requestBody": {
+          "description": "The URL of the image to extract text from and the language to use for OCR.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OCRRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The extracted text from the image.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OCRResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An error occurred while extracting text from image.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+  
+    "/brainly/search": {
+      "get": {
+        "tags": [
+          "Brainly"
+        ], 
+        "summary": "Search for questions on Brainly",
+        "description": "Search in brainly",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "The question to search for",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }, 
+          {
+            "name": "lang",
+            "in": "query",
+            "description": "The country code of the search query (default: ph)",
+            "required": true,
+            "schema": {
+              "type": "string", 
+              "default": "ph"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+        "/gscraper": {
+      "get": {
+        "tags": [
+          "GooglePlayScraper"
+        ],
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "query",
+            "description": "you will need to get the AppID Example: com.google.android.apps.translate' this will show the Google Translate app full details ",
+            "required": true, 
+            "style": "form", 
+            "explode": true,
+            "schema": {
+              "type": "string", 
+              "default": "com.google.android.apps.translate" 
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "/ytsearch/search": {
+      "get": {
+        "tags": [
+          "YouTube "
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search for yt videos ",
+            "required": true, 
+            "style": "form", 
+            "explode": true,
+            "schema": {
+              "type": "string"  
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "/gscraper/apps/search": {
+      "get": {
+        "tags": [
+          "GooglePlayScraper"
+        ], 
+        "summary": "Search for apps in Google Play Store",
+        "parameters": [
+          { 
+            "name": "term",
+            "in": "query",
+            "description": "The search term",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "num",
+            "in": "query",
+            "description": "The number of results to return (default: 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 5
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string",
+                        "description": "The URL of the app in Google Play Store"
+                      },
+                      "appId": {
+                        "type": "string",
+                        "description": "The app ID in Google Play Store"
+                      },
+                      "summary": {
+                        "type": "string",
+                        "description": "A brief summary of the app"
+                      },
+                      "title": {
+                        "type": "string",
+                        "description": "The title of the app"
+                      },
+                      "developer": {
+                        "type": "string",
+                        "description": "The developer of the app"
+                      },
+                      "developerId": {
+                        "type": "string",
+                        "description": "The developer ID in Google Play Store"
+                      },
+                      "icon": {
+                        "type": "string",
+                        "description": "The URL of the app icon"
+                      },
+                      "score": {
+                        "type": "number",
+                        "description": "The score of the app in Google Play Store (0-5)"
+                      },
+                      "scoreText": {
+                        "type": "string",
+                        "description": "The score of the app in text format"
+                      },
+                      "priceText": {
+                        "type": "string",
+                        "description": "The price of the app in text format"
+                      },
+                      "free": {
+                        "type": "boolean",
+                        "description": "Whether the app is free or not"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }, 
+         
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "The error message"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+       } 
+    },
+
+    "/anime/id": {
+            "get": {
+                "tags": [
+                    "Anime"
+                ],
+                "operationId": "getAnimeFullById",
+                "parameters": [
+                    {
+                        "name": "id",
+              "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+  "200": {
+    "description": "Returns complete anime resource data",
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "$ref": "#/components/schemas/anime_full"
+            }
+          }
+        }
+      }
+    }
+  },
+  "400": {
+    "description": "Error: Bad request. When required parameters were not supplied."
+  }
+}
+            }
+       }, 
+    "/anime": {
+      "get": {
+        "tags": [
+          "Anime"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true, 
+            "style": "form", 
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+ "/lyrics/{title}/{artist}": {
+      "get": {
+        "summary": "Get lyrics for a song",
+        "parameters": [
+          {
+            "name": "title",
+            "in": "path",
+            "description": "Artist name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "artist",
+            "in": "path",
+            "description": "Song title",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lyrics found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Lyrics not found"
+          }
+        }
+      }
+    }, 
+ 
+  
+
+
+ 
+    "/gtts": {
+      "get": {
+        "tags": [
+          "Text to Speech"
+        ],
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string", 
+              "default": "en"
+            }
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          } 
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "audio/mp3": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                } 
+              }
+            }
+          },
+             "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        },
+        "summary": "convert text to speech",
+        "description": "This endpoint will convert the given text to speech."
+      }
+    },
+    "/gsmarena/device/search": {
+      "get": {
+        "tags": [
+          "Device"
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true, 
+            "style": "form", 
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gsmarena/device/{name}": {
+      "get": {
+        "tags": [
+          "Device"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "You will need to get the DeviceID Example: apple_iphone_13_pro_max-11089' this will show The Device  full Specifications details", 
+            "default": "apple_iphone_13_pro_max-11089", 
+            "required": true, 
+            "style": "form", 
+            "explode": true,
+            "schema": {
+              "type": "string" 
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gsmarena/device/top": {
+      "get": {
+        "tags": [
+          "Device"
+         ], 
+            "summary" : "get top device", 
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+   }, 
+        "/gsmarena/device/deals": {
+      "get": {
+        "tags": [
+          "Device"
+         ], 
+            "summary" : "get the Deals device", 
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+   }, 
+    "/animequote": {
+      "get": {
+        "tags": [
+          "Anime Quotes"
+        ],
+        "summary": "Get a random anime quote",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/animequote/{id}": {
+      "get": {
+        "tags": [
+          "Anime Quotes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the anime quote",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/200"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/422"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get an anime quote by ID",
+        "description": "This endpoint returns an anime quote by ID."
+      }
+    },
+    
+    "/animequote/anime/{anime}": {
+      "get": {
+        "tags": [
+          "Anime Quotes"
+        ],
+        "parameters": [
+          {
+            "name": "anime",
+          "in": "path",
+"description": "The name of the anime",
+"required": true,
+"schema": {
+"type": "string"
+}
+}
+],
+"responses": {
+"200": {
+"description": "Success",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/200"
+}
+}
+}
+},
+"422": {
+"description": "Validation Error",
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/422 "
+}
+}
+}
+}
+},
+"summary": "Get an anime quote by anime name",
+"description": "This endpoint returns an anime quote from a specific anime."
+       } 
+     } 
+   } 
+ } 
+
+    
+
+
+    
+    
+  
+
+ 
